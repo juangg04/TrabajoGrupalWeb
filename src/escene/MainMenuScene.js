@@ -1,3 +1,4 @@
+// src/escene/MainMenuScene.js
 export default class MainMenuScene extends Phaser.Scene {
     constructor() {
         super({ key: 'MainMenuScene' });
@@ -16,7 +17,7 @@ export default class MainMenuScene extends Phaser.Scene {
         }
 
         const frames = [];
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 8; i++) { // Asegúrate de que el número de frames coincida con los cargados
             frames.push({ key: `frame${i}` });
         }
 
@@ -44,7 +45,7 @@ export default class MainMenuScene extends Phaser.Scene {
 
         playText.setInteractive();
         playText.on('pointerdown', () => {
-            console.log('Jugar');
+            this.scene.start('Nivel1Scene'); // Inicia la escena de Nivel 1
         });
 
         configText.setInteractive();
