@@ -1,31 +1,33 @@
-// src/escene/Nivel1Scene.js
 export default class Nivel1Scene extends Phaser.Scene {
     constructor() {
         super({ key: 'Nivel1Scene' });
     }
 
     preload() {
-        this.load.image("tilesheet1", "src/Assets/Imagenes/Fondos/Fondo.jpg");
-        this.load.image("tilesheet2", "src/Assets/Imagenes/Plataformas/PlataformaIzquierda.png");
-        this.load.image("tilesheet3", "src/Assets/Imagenes/Plataformas/PlataformaMedia.png");
-        this.load.image("tilesheet4", "src/Assets/Imagenes/Plataformas/Suelo.png");
-        this.load.image("tilesheet5", "src/Assets/Imagenes/Fondos/Fondo1.jpg");
-        this.load.tilemapTiledJSON("map", "src/Assets/Niveles/primernivel.json");
+        // Carga del tileset
+        this.load.image("tilesets", "src/Assets/Imagenes/nature-paltformer-tileset-16x16.png");
+        // Carga del mapa en formato JSON
+        this.load.tilemapTiledJSON("map", "src/Assets/Niveles/primermapa.json");
     }
 
     create() {
+        // Inicializa el mapa de tiles
         this.mapa = this.make.tilemap({ key: 'map' });
 
-        const tileset1 = this.mapa.addTilesetImage("Fondo2", "tilesheet1");
-        const tileset2 = this.mapa.addTilesetImage("PlataformaIzquierda", "tilesheet2");
-        const tileset3 = this.mapa.addTilesetImage("PlataformaMedia", "tilesheet3");
-        const tileset4 = this.mapa.addTilesetImage("Suelo", "tilesheet4");
-        const tileset5 = this.mapa.addTilesetImage("Fondo1", "tilesheet5");
+        // Añade el tileset al mapa
+        const hojaTiles = this.mapa.addTilesetImage("Assets2", "tilesets");
 
-        const offsetX = (this.cameras.main.width - this.mapa.widthInPixels) / 2;
+        // Calcula el desplazamiento para centrar el mapa
+        const offsetX = (this.cameras.main.width - this.mapa.widthInPixels) / 2 -50;
         const offsetY = (this.cameras.main.height - this.mapa.heightInPixels) / 2;
 
-        this.Capa1 = this.mapa.createLayer("Capa de patrones 1", [tileset1, tileset5], offsetX, offsetY);
-        this.Capa2 = this.mapa.createLayer("Capa de patrones 2", [tileset2, tileset3, tileset4, tileset5], offsetX, offsetY);
+        // Crea las capas del mapa
+        this.Capa1 = this.mapa.createLayer("Capa de patrones 1", hojaTiles, offsetX, offsetY);
+        this.Capa2 = this.mapa.createLayer("Capa de patrones 2", hojaTiles, offsetX, offsetY);
+        this.Capa3 = this.mapa.createLayer("Capa de patrones 3", hojaTiles, offsetX, offsetY);
+
+        // Ajusta la cámara para que se adapte al tamaño del mapa
+        this.cameras.main.setBounds(0, 0, this.mapa.widthInPixels, this.mapa.heightInPixels);
+        this.cameras.main.centerOn(this.mapa.widthInPixels / 2, this.mapa.heightInPixels / 2);
     }
 }
