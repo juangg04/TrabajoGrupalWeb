@@ -118,6 +118,6 @@ export default class Nivel1Scene extends Phaser.Scene {
   activarGravedad(player, powerupGravedad) {
     player.gravedadInvertida = !player.gravedadInvertida;
     this.physics.world.gravity.y *= -1;
-    powerupGravedad.destroy(); 
+    powerupGravedad.destroy(); //a
   }
 }
