@@ -59,7 +59,7 @@ class Nivel2Scene extends Phaser.Scene {
       .setDepth(0);
 
     // Crear instancia de jugador
-    this.player = new Jugador(this, offsetX + 100, 2761);
+    this.player = new Jugador(this, offsetX + 100, offsetY);
     this.player.setScale(0.6);
 
     // Habilitar las colisiones con el jugador
@@ -163,11 +163,15 @@ class Nivel2Scene extends Phaser.Scene {
       (this.cameras.main.height - this.mapa.heightInPixels) / 2 + 1300;
     player.x = offsetX + 100;
     player.y = offsetY;
+
+    if (player.gravedadInvertida) {
+      this.physics.world.gravity.y *= -1;
+    }
+    player.resetGravity();
     //Aqui un contador de muertes
   }
 
   nivelCompletado(player, bandera) {
-    this.destroy();
     this.scene.start("LevelSelectScene");
     this.game.global.isLevel2Completed = true;
   }
@@ -178,9 +182,14 @@ class Nivel2Scene extends Phaser.Scene {
   }
 
   activarGravedad(player, powerupGravedad) {
-    player.gravedadInvertida = !player.gravedadInvertida;
-    this.physics.world.gravity.y *= -1;
-    powerupGravedad.destroy();
+    if (powerupGravedad.visible) {
+      player.modifyGravity();
+      this.physics.world.gravity.y *= -1;
+      powerupGravedad.setVisible(false);
+      setTimeout(() => {
+        powerupGravedad.setVisible(true);
+      }, 1000);
+    }
   }
 }
 
