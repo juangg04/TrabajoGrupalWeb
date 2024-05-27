@@ -31,6 +31,8 @@ export default class Nivel1Scene extends Phaser.Scene {
     this.load.image("powerupMartillo", "src/Assets/Imagenes/hammer.png");
     // Sonido moneda
     this.load.audio("recogerSonido", "src/Assets/Audio/Sonido de moneda.mp3");
+    // Bandera final
+    this.load.image("bandera", "src/Assets/Imagenes/bandera.png");
   }
 
   create() {
@@ -111,6 +113,20 @@ export default class Nivel1Scene extends Phaser.Scene {
       this
     );
 
+    // Crear bandera y agregarla al juego
+    this.bandera = this.physics.add.staticImage(jugadorX, 140, "bandera");
+    this.bandera.setScale(0.1); // Ajustar la escala de la bandera
+    this.bandera.refreshBody(); // Actualizar el cuerpo físico de la bandera
+
+    // Habilitar colisión entre el jugador y la bandera
+    this.physics.add.overlap(
+      this.player,
+      this.bandera,
+      this.nivelCompletado,
+      null,
+      this
+    );
+
     // Cargar el sonido de recoger moneda
     this.recogerSonido = this.sound.add("recogerSonido");
   }
@@ -140,6 +156,11 @@ export default class Nivel1Scene extends Phaser.Scene {
   activarGravedad(player, powerupGravedad) {
     player.gravedadInvertida = !player.gravedadInvertida;
     this.physics.world.gravity.y *= -1;
-    powerupGravedad.destroy(); //a
+    powerupGravedad.destroy();
+  }
+
+  nivelCompletado(player, bandera) {
+    this.scene.start("LevelSelectScene");
+    this.game.global.isLevel1Completed = true;
   }
 }
