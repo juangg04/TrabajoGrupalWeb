@@ -179,7 +179,7 @@ class PrimerNivel extends Phaser.Scene {
     }
   }
 
-  // Manejar la recogida de una moneda
+  // Manejar la recfogida de una moneda
   recogerMoneda(player, moneda) {
     moneda.destroy(); // Destruir la moneda
     this.recogerSonido.play(); // Reproducir el sonido de recogida de moneda
