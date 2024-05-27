@@ -19,9 +19,19 @@ class Nivel2Scene extends Phaser.Scene {
     );
     // Carga la imagen de la bandera
     this.load.image("bandera", "src/Assets/Imagenes/bandera.png");
+    // Powerup martillo
+    this.load.image("powerupMartillo", "src/Assets/Imagenes/hammer.png");
+    // Powerup gravedad
+    this.load.image(
+      "powerupGravedad",
+      "src/Assets/Imagenes/gravitySwapper.png"
+    );
   }
 
   create() {
+    // Crear el grupo de powerups de martillo
+    this.powerupsMartillo = this.physics.add.group();
+
     // Inicializa el mapa de tiles
     this.mapa = this.make.tilemap({ key: "map" });
     this.hojaTiles = this.mapa.addTilesetImage("Assets", "tilesheet");
@@ -49,7 +59,7 @@ class Nivel2Scene extends Phaser.Scene {
       .setDepth(0);
 
     // Crear instancia de jugador
-    this.player = new Jugador(this, offsetX + 100, offsetY);
+    this.player = new Jugador(this, offsetX + 100, 2761);
     this.player.setScale(0.6);
 
     // Habilitar las colisiones con el jugador
@@ -63,7 +73,7 @@ class Nivel2Scene extends Phaser.Scene {
 
     // Crear bandera y agregarla al juego
     this.bandera = this.physics.add.staticImage(offsetX + 100, 3080, "bandera");
-    this.bandera.setScale(0.1); // Ajustar la escala de la bandera
+    this.bandera.setScale(0.05); // Ajustar la escala de la bandera
     this.bandera.refreshBody(); // Actualizar el cuerpo físico de la bandera
 
     // Habilitar colisión entre el jugador y la bandera
@@ -71,6 +81,49 @@ class Nivel2Scene extends Phaser.Scene {
       this.player,
       this.bandera,
       this.nivelCompletado,
+      null,
+      this
+    );
+
+    // Crear powerup de martillo y agregarlo al grupo
+    const powerupMartillo = this.powerupsMartillo.create(
+      550,
+      160,
+      "powerupMartillo"
+    );
+    powerupMartillo.body.allowGravity = false;
+    powerupMartillo.setScale(0.06);
+
+    this.physics.add.overlap(
+      this.player,
+      this.powerupsMartillo,
+      this.activarMartillo,
+      null,
+      this
+    );
+
+    // Crear un grupo de powerups de gravedad
+    this.powerupsGravedad = this.physics.add.group();
+
+    // Crear powerup de gravedad y agregarlo al grupo
+    const powerupGravedad = this.powerupsGravedad.create(
+      452,
+      2761,
+      "powerupGravedad"
+    );
+    powerupGravedad.body.allowGravity = false;
+    const powerupGravedad2 = this.powerupsGravedad.create(
+      200,
+      2841,
+      "powerupGravedad"
+    );
+    powerupGravedad2.body.allowGravity = false;
+
+    // Habilitar colisión entre el jugador y los powerups de gravedad
+    this.physics.add.overlap(
+      this.player,
+      this.powerupsGravedad,
+      this.activarGravedad,
       null,
       this
     );
@@ -91,6 +144,17 @@ class Nivel2Scene extends Phaser.Scene {
     if (this.player.x > 610) {
       this.player.x = 610;
     }
+
+    if (this.player.y < 5) {
+      this.player.y = 5;
+    }
+
+    console.log(
+      "Coordenadas del jugador - X:",
+      this.player.x,
+      "Y:",
+      this.player.y
+    );
   }
 
   morir(player, capa5) {
@@ -105,7 +169,18 @@ class Nivel2Scene extends Phaser.Scene {
   nivelCompletado(player, bandera) {
     this.destroy();
     this.scene.start("LevelSelectScene");
-    // this.game.global.isLevel2Completed = true;
+    this.game.global.isLevel2Completed = true;
+  }
+
+  activarMartillo(player, powerupMartillo) {
+    powerupMartillo.destroy();
+    this.player.powerupActivo = true;
+  }
+
+  activarGravedad(player, powerupGravedad) {
+    player.gravedadInvertida = !player.gravedadInvertida;
+    this.physics.world.gravity.y *= -1;
+    powerupGravedad.destroy();
   }
 }
 

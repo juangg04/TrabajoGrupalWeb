@@ -5,6 +5,8 @@ class PrimerNivel extends Phaser.Scene {
     super({ key: "PrimerNivel" });
     this.plataformasGeneradas = 0; // Variable de conteo para las plataformas generadas
     this.plataformas = []; // Array para almacenar las plataformas generadas
+    this.totalMonedas = 20; // Total de monedas
+    this.monedasRecogidas = 0; // Contador de monedas recogidas
   }
 
   preload() {
@@ -177,11 +179,16 @@ class PrimerNivel extends Phaser.Scene {
     }
   }
 
-  // Manejar la recogida de una moneda
+  // Manejar la recfogida de una moneda
   recogerMoneda(player, moneda) {
     moneda.destroy(); // Destruir la moneda
     this.recogerSonido.play(); // Reproducir el sonido de recogida de moneda
-    console.log("Moneda colectada"); // Depuración
+    console.log("Moneda recolectada"); // Depuración
+    this.monedasRecogidas++;
+    if (this.monedasRecogidas === this.totalMonedas) {
+      // Si se han recogido todas las monedas acaba
+      this.scene.start("LevelSelectScene");
+    }
   }
 
   update() {
