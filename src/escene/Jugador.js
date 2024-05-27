@@ -7,6 +7,11 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
+    this.body.setSize(30, 40); 
+    this.body.setOffset(15, 40);
+
+    this.powerupActivo = false;
+
     // Configurar las animaciones del jugador
     scene.anims.create({
       key: "idle",
@@ -79,12 +84,12 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
       }
 
       if (cursors.up.isDown && this.body.onFloor()) {
-        this.setVelocityY(-330); // Salto
+        this.setVelocityY(-250); // Salto
         this.anims.play("jump", true);
       }
 
       // Lógica de golpear
-      if (cursors.space.isDown) {
+      if (cursors.space.isDown && this.powerupActivo) {
         this.isHitting = true;
         this.setVelocityX(0); // Detener movimiento horizontal al golpear
         this.anims.play("hit", true);
@@ -92,6 +97,8 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
         this.scene.time.delayedCall(700, () => {
           this.isHitting = false;
         });
+      }
+      else{
       }
     }
   }

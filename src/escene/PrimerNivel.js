@@ -22,6 +22,8 @@ class PrimerNivel extends Phaser.Scene {
     this.load.image("moneda", "src/Assets/Imagenes/Moneda.png");
     // Cargar el sonido de recogida de moneda
     this.load.audio("recogerSonido", "src/Assets/Audio/Sonido de moneda.mp3");
+    // Powerup martillo
+    this.load.image("powerupMartillo", "src/Assets/Imagenes/hammer.png");
   }
 
   create() {
@@ -69,6 +71,16 @@ class PrimerNivel extends Phaser.Scene {
 
     // Crear instancia de jugador
     this.player = new Jugador(this, 100, 450);
+
+    // Crear un grupo de powerups de gravedad
+    this.powerupsMartillo = this.physics.add.group();
+
+    // Crear powerup de martillo y agregarlo al grupo
+    const powerupMartillo = this.powerupsMartillo.create(150, 540, 'powerupMartillo');
+    powerupMartillo.body.allowGravity = false;
+    powerupMartillo.setScale(0.1);
+    
+    this.physics.add.overlap(this.player, this.powerupsMartillo, this.activarMartillo, null, this);
 
     // Habilitar las colisiones entre el jugador y el suelo
     this.physics.add.collider(this.player, sueloGroup);
@@ -177,6 +189,11 @@ class PrimerNivel extends Phaser.Scene {
     // Actualizar jugador
     this.player.update(this.cursors);
   }
+
+  activarMartillo(player, powerupMartillo) {
+    powerupMartillo.destroy();
+    this.player.powerupActivo = true;
+  }  
 }
 
 export default PrimerNivel; // Exportar la clase PrimerNivel como predeterminada

@@ -47,13 +47,13 @@ class Nivel2Scene extends Phaser.Scene {
 
     // Crear instancia de jugador
     this.player = new Jugador(this, offsetX + 100, offsetY);
-    this.player.setScale(0.4);
+    this.player.setScale(0.6);
 
     // Habilitar las colisiones entre el jugador con el suelo y con la lava
     this.capa3.setCollisionBetween(1, 100, true, false, this.capa3);
     this.physics.add.collider(this.player, this.capa3);
-    this.capa5.setCollisionBetween(1, 100, true, false, this.capa5);
-    this.physics.add.collider(this.player, this.capa5);
+    //this.capa5.setCollisionBetween(1, 100, true, false, this.capa5);
+    //this.physics.add.collider(this.player, this.capa5);
 
     // Obtener cursores
     this.cursors = this.input.keyboard.createCursorKeys();
