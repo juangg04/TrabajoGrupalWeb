@@ -28,7 +28,8 @@ class Nivel2Scene extends Phaser.Scene {
 
     // Calcula el desplazamiento para centrar el mapa
     const offsetX = (this.cameras.main.width - this.mapa.widthInPixels) / 2;
-    const offsetY = (this.cameras.main.height - this.mapa.heightInPixels) / 2 + 1300;
+    const offsetY =
+      (this.cameras.main.height - this.mapa.heightInPixels) / 2 + 1300;
 
     // Crea las capas y establece su posición y profundidad
     this.capa1 = this.mapa
@@ -66,7 +67,13 @@ class Nivel2Scene extends Phaser.Scene {
     this.bandera.refreshBody(); // Actualizar el cuerpo físico de la bandera
 
     // Habilitar colisión entre el jugador y la bandera
-    this.physics.add.overlap(this.player, this.bandera, this.nivelCompletado, null, this);
+    this.physics.add.overlap(
+      this.player,
+      this.bandera,
+      this.nivelCompletado,
+      null,
+      this
+    );
   }
 
   update() {
@@ -96,8 +103,9 @@ class Nivel2Scene extends Phaser.Scene {
   }
 
   nivelCompletado(player, bandera) {
+    this.destroy();
     this.scene.start("LevelSelectScene");
-    this.game.global.isLevel2Completed = true;
+    // this.game.global.isLevel2Completed = true;
   }
 }
 

@@ -58,7 +58,7 @@ export default class Nivel1Scene extends Phaser.Scene {
     // Crear instancia de jugador
     const jugadorX = 10;
     const jugadorY = this.mapa.heightInPixels - 50; // Ajusta esta posición según sea necesario
-    this.player = new Jugador(this, jugadorX, jugadorY);
+    this.player = new Jugador(this, 100, 2500);
     this.add.existing(this.player);
     this.player.setScale(0.6);
 
@@ -103,6 +103,14 @@ export default class Nivel1Scene extends Phaser.Scene {
       "powerupGravedad"
     );
     powerupGravedad.body.allowGravity = false;
+
+    // Crear powerup de gravedad y agregarlo al grupo
+    const powerupAntiGravedad = this.powerupsGravedad.create(
+      100,
+      1921,
+      "powerupGravedad"
+    );
+    powerupAntiGravedad.body.allowGravity = false;
 
     // Habilitar colisión entre el jugador y los powerups de gravedad
     this.physics.add.overlap(
@@ -154,13 +162,18 @@ export default class Nivel1Scene extends Phaser.Scene {
   }
 
   activarGravedad(player, powerupGravedad) {
-    player.gravedadInvertida = !player.gravedadInvertida;
-    this.physics.world.gravity.y *= -1;
-    powerupGravedad.destroy();
+    if (powerupGravedad.visible) {
+      this.player.modifyGravity();
+      this.physics.world.gravity.y *= -1;
+      powerupGravedad.setVisible(false);
+      setTimeout(() => {
+        powerupGravedad.setVisible(true);
+      }, 1000);
+    }
   }
 
   nivelCompletado(player, bandera) {
     this.scene.start("LevelSelectScene");
-    this.game.global.isLevel1Completed = true;
+    // this.game.global.isLevel1Completed = true;
   }
 }

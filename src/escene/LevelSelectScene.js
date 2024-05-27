@@ -50,36 +50,36 @@ export default class LevelSelectScene extends Phaser.Scene {
     });
 
     // Segundo Nivel
-    if (this.game.global.isLevel1Completed) {
-      const level2Text = this.add
-        .text(this.scale.width / 2, this.scale.height / 2 + 50, "Nivel 2", {
-          fontSize: "32px",
-          fill: "#fff",
-          fontFamily: "Roboto",
-        })
-        .setOrigin(0.5);
+    //if (this.game.global.isLevel1Completed) {
+    const level2Text = this.add
+      .text(this.scale.width / 2, this.scale.height / 2 + 50, "Nivel 2", {
+        fontSize: "32px",
+        fill: "#fff",
+        fontFamily: "Roboto",
+      })
+      .setOrigin(0.5);
 
-      level2Text.setInteractive();
-      level2Text.on("pointerdown", () => {
-        this.scene.start("Nivel2Scene");
-      });
-    }
+    level2Text.setInteractive();
+    level2Text.on("pointerdown", () => {
+      this.scene.start("Nivel2Scene");
+    });
+    //}
 
-    if (this.game.global.isLevel2Completed) {
-      // Nivel extra
-      const specialLevelText = this.add
-        .text(this.scale.width / 2, this.scale.height / 2, "Nivel Especial", {
-          fontSize: "32px",
-          fill: "#fff",
-          fontFamily: "Roboto",
-        })
-        .setOrigin(0.5);
+    //if (this.game.global.isLevel2Completed) {
+    // Nivel extra
+    const specialLevelText = this.add
+      .text(this.scale.width / 2, this.scale.height / 2, "Nivel Especial", {
+        fontSize: "32px",
+        fill: "#fff",
+        fontFamily: "Roboto",
+      })
+      .setOrigin(0.5);
 
-      specialLevelText.setInteractive();
-      specialLevelText.on("pointerdown", () => {
-        this.scene.start("PrimerNivel");
-      });
-    }
+    specialLevelText.setInteractive();
+    specialLevelText.on("pointerdown", () => {
+      this.scene.start("PrimerNivel");
+    });
+    //}
 
     const backButton = this.add
       .text(400, 500, "Volver", {

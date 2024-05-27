@@ -33,7 +33,4 @@ const config = {
 const game = new Phaser.Game(config);
 
 // Crear una propiedad global para almacenar datos compartidos
-game.global = {
-  isLevel1Completed: boolean,
-  isLevel2Completed: booelan,
-};
+game.global = {};
