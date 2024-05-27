@@ -58,7 +58,7 @@ export default class Nivel1Scene extends Phaser.Scene {
     // Crear instancia de jugador
     const jugadorX = 10;
     const jugadorY = this.mapa.heightInPixels - 50; // Ajusta esta posición según sea necesario
-    this.player = new Jugador(this, 100, 2500);
+    this.player = new Jugador(this, jugadorX, jugadorY);
     this.add.existing(this.player);
     this.player.setScale(0.6);
 
@@ -163,7 +163,7 @@ export default class Nivel1Scene extends Phaser.Scene {
 
   activarGravedad(player, powerupGravedad) {
     if (powerupGravedad.visible) {
-      this.player.modifyGravity();
+      player.modifyGravity();
       this.physics.world.gravity.y *= -1;
       powerupGravedad.setVisible(false);
       setTimeout(() => {

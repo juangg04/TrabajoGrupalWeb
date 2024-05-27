@@ -113,11 +113,16 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
       this.body.setSize(30, 40);
       this.body.setOffset(15, 0);
     } else {
-      this.setGravityY(300);
-      this.flipY = false;
-      this.body.setSize(30, 40);
-      this.body.setOffset(15, 40);
+      this.resetGravity();
     }
+  }
+
+  resetGravity() {
+    this.gravedadInvertida = false;
+    this.setGravityY(300);
+    this.flipY = false;
+    this.body.setSize(30, 40);
+    this.body.setOffset(15, 40);
   }
 }
 
