@@ -1,3 +1,5 @@
+import Jugador from './Jugador.js';
+
 export default class Nivel1Scene extends Phaser.Scene {
     constructor() {
         super({ key: 'Nivel1Scene' });
@@ -8,6 +10,10 @@ export default class Nivel1Scene extends Phaser.Scene {
         this.load.image("tilesets", "src/Assets/Imagenes/nature-paltformer-tileset-16x16.png");
         // Carga del mapa en formato JSON
         this.load.tilemapTiledJSON("map", "src/Assets/Niveles/primermapa.json");
+        // Personaje
+        this.load.spritesheet('player', 'src/Assets/Imagenes/Jugador/Jugador_CorrerAnimación_PosiciónEstatica_Golpear.png', { frameWidth: 81, frameHeight: 85 });
+        // Sonido moneda
+        this.load.audio('recogerSonido', 'src/Assets/Audio/Sonido de moneda.mp3');
     }
 
     create() {
@@ -17,17 +23,30 @@ export default class Nivel1Scene extends Phaser.Scene {
         // Añade el tileset al mapa
         const hojaTiles = this.mapa.addTilesetImage("Assets2", "tilesets");
 
-        // Calcula el desplazamiento para centrar el mapa
-        const offsetX = (this.cameras.main.width - this.mapa.widthInPixels) / 2 -50;
-        const offsetY = (this.cameras.main.height - this.mapa.heightInPixels) / 2;
-
         // Crea las capas del mapa
-        this.Capa1 = this.mapa.createLayer("Capa de patrones 1", hojaTiles, offsetX, offsetY);
-        this.Capa2 = this.mapa.createLayer("Capa de patrones 2", hojaTiles, offsetX, offsetY);
-        this.Capa3 = this.mapa.createLayer("Capa de patrones 3", hojaTiles, offsetX, offsetY);
+        this.Capa1 = this.mapa.createLayer("Capa de patrones 1", hojaTiles);
+        this.Capa2 = this.mapa.createLayer("Capa de patrones 2", hojaTiles);
+        this.Capa3 = this.mapa.createLayer("Capa de patrones 3", hojaTiles);
 
         // Ajusta la cámara para que se adapte al tamaño del mapa
         this.cameras.main.setBounds(0, 0, this.mapa.widthInPixels, this.mapa.heightInPixels);
-        this.cameras.main.centerOn(this.mapa.widthInPixels / 2, this.mapa.heightInPixels / 2);
+
+        // Crear instancia de jugador
+        this.player = new Jugador(this, 200, 2500);
+        this.player.setScale(0.6);
+        // Habilitar las colisiones entre el jugador y el suelo
+        this.physics.add.collider(this.player, this.Capa2);
+
+        // Obtener cursores
+        this.cursors = this.input.keyboard.createCursorKeys();
+    }
+
+    update() {
+        // Actualizar jugador
+        this.player.update(this.cursors);
+
+        // Centrar la cámara en el jugador
+        this.cameras.main.scrollX = this.player.x - this.cameras.main.width / 2;
+        this.cameras.main.scrollY = this.player.y - this.cameras.main.height / 2;
     }
 }

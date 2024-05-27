@@ -16,8 +16,8 @@ class Nivel2Scene extends Phaser.Scene {
         this.hojaTiles = this.mapa.addTilesetImage("Assets", "tilesheet");
 
         // Calcula el desplazamiento para centrar el mapa
-        const offsetX = (this.cameras.main.width - this.mapa.widthInPixels) / 2 - 70;
-        const offsetY = (this.cameras.main.height - this.mapa.heightInPixels) / 2 + 1500;
+        const offsetX = (this.cameras.main.width - this.mapa.widthInPixels) / 2;
+        const offsetY = (this.cameras.main.height - this.mapa.heightInPixels) / 2 + 1300;
 
         // Crea las capas y establece su posición y profundidad
         this.Capa1 = this.mapa.createLayer("Capa de patrones 1", this.hojaTiles, offsetX, offsetY).setDepth(4);

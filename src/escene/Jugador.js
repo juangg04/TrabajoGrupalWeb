@@ -38,7 +38,7 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
 
         // Configurar las físicas del jugador
         this.setCollideWorldBounds(true);
-        this.setGravityY(300); // Ajusta la gravedad según sea necesario
+        this.setGravityY(300); // Ajusta la gravedad
 
         // Agregar una variable para controlar la animación de golpe
         this.isHitting = false;
