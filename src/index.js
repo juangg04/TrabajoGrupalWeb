@@ -3,6 +3,7 @@ import MainMenuScene from './escene/MainMenuScene.js';
 import SettingsScene from './escene/SettingsScene.js';
 import PrimerNivel from './escene/PrimerNivel.js'; // Asegúrate de importar correctamente
 
+
 const config = {
     type: Phaser.AUTO,
     width: 800,
@@ -18,7 +19,7 @@ const config = {
             debug: false
         }
     },
-    scene: [MainMenuScene, SettingsScene, PrimerNivel] // Asegúrate de que PrimerNivel esté en la configuración
+    scene: [MainMenuScene, SettingsScene, PrimerNivel,] // Asegúrate de que PrimerNivel esté en la configuración
 };
 
 const game = new Phaser.Game(config);
