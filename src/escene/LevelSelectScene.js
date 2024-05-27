@@ -80,6 +80,19 @@ export default class LevelSelectScene extends Phaser.Scene {
         this.scene.start("PrimerNivel");
       });
     }
+
+    const backButton = this.add
+      .text(400, 500, "Volver", {
+        fontSize: "24px",
+        fill: "#fff",
+        fontFamily: "Roboto",
+      })
+      .setOrigin(0.5)
+      .setInteractive();
+
+    backButton.on("pointerdown", () => {
+      this.scene.start("MainMenuScene");
+    });
   }
 
   update() {
