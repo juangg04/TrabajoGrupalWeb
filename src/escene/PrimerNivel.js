@@ -15,9 +15,9 @@ class PrimerNivel extends Phaser.Scene {
         // Cargar la imagen del suelo
         this.load.image('suelo', 'src/Assets/Imagenes/Plataformas/Suelo.png');
         // Cargar la imagen de la moneda
-        this.load.image('moneda', 'src/Assets/Imagenes/Moneda.png'); // Corrige la ruta de la imagen de la moneda si es necesario
+        this.load.image('moneda', 'src/Assets/Imagenes/Moneda.png');
         // Cargar el sonido de recogida de moneda
-        this.load.audio('recogerSonido', 'src/Assets/Audio/Sonido de moneda.mp3'); // Corrige la ruta del sonido si es necesario
+        this.load.audio('recogerSonido', 'src/Assets/Audio/Sonido de moneda.mp3');
     }
 
     create() {
@@ -75,9 +75,11 @@ class PrimerNivel extends Phaser.Scene {
         for (let i = 0; i < 20; i++) {
             const x = Phaser.Math.Between(50, 750); // Posición x aleatoria
             const y = Phaser.Math.Between(50, 550); // Posición y aleatoria
+            console.log(`Generating coin at (${x}, ${y})`); // Depuración
             const moneda = this.monedas.create(x, y, 'moneda');
-            moneda.setScale(0.07); // Ajustar la escala de la moneda a 0.25
+            moneda.setScale(2); // Ajustar la escala de la moneda
             moneda.refreshBody(); // Actualizar el cuerpo físico de la moneda para que sea estático
+            console.log(`Coin ${i} created with scale ${moneda.scaleX}, ${moneda.scaleY}`); // Depuración
         }
 
         // Habilitar las colisiones entre el jugador y las monedas
@@ -92,24 +94,27 @@ class PrimerNivel extends Phaser.Scene {
         if (this.plataformasGeneradas >= 10) {
             return; // Salir de la función si se alcanza el límite
         }
-
+    
         // Crear una plataforma en la posición donde se hizo clic
         const plataforma = this.physics.add.image(pointer.x, pointer.y, 'suelo');
         plataforma.setScale(0.5); // Ajustar la escala de la plataforma
         plataforma.setOrigin(0.5, 1); // Establecer el origen en la parte inferior
-
+    
+        // Ajustar el tamaño para el collider
+        plataforma.body.setSize(plataforma.width * plataforma.scaleX, plataforma.height * plataforma.scaleY);
+    
         // Agregar la plataforma al array de plataformas
         this.plataformas.push(plataforma);
-
+    
         // Verificar si la plataforma tiene un cuerpo físico antes de establecerlo como estático
         if (plataforma.body) {
             plataforma.body.setAllowGravity(false); // Desactivar la gravedad
             plataforma.body.immovable = true; // Hacer que la plataforma sea inamovible
         }
-
+    
         // Habilitar las colisiones entre el jugador y la plataforma
         this.physics.add.collider(this.player, plataforma, this.handleCollision, null, this);
-
+    
         // Incrementar el contador de plataformas generadas
         this.plataformasGeneradas++;
     }
@@ -136,7 +141,7 @@ class PrimerNivel extends Phaser.Scene {
     recogerMoneda(player, moneda) {
         moneda.destroy(); // Destruir la moneda
         this.recogerSonido.play(); // Reproducir el sonido de recogida de moneda
-        // Aquí puedes agregar cualquier otra lógica para cuando se recoja una moneda
+        console.log('Moneda colectada'); // Depuración
     }
 
     update() {

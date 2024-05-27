@@ -1,4 +1,4 @@
-// src/escene/MainMenuScene.js
+// src/scenes/MainMenuScene.js
 export default class MainMenuScene extends Phaser.Scene {
     constructor() {
         super({ key: 'MainMenuScene' });
@@ -17,7 +17,7 @@ export default class MainMenuScene extends Phaser.Scene {
         }
 
         const frames = [];
-        for (let i = 0; i < 8; i++) { // Asegúrate de que el número de frames coincida con los cargados
+        for (let i = 0; i < 8; i++) {
             frames.push({ key: `frame${i}` });
         }
 
@@ -28,24 +28,27 @@ export default class MainMenuScene extends Phaser.Scene {
             repeat: -1
         });
 
-        const background = this.add.sprite(400, 300, 'frame0').play('backgroundAnim');
-        background.setDisplaySize(800, 600);
+        // Crear el fondo animado y centrarlo
+        const background = this.add.sprite(this.scale.width / 2, this.scale.height / 2, 'frame0').play('backgroundAnim');
+        background.setDisplaySize(this.scale.width, this.scale.height);
 
-        const playText = this.add.text(400, 300, 'Jugar', {
+        // Crear y centrar los textos
+        const playText = this.add.text(this.scale.width / 2, this.scale.height / 2, 'Jugar', {
             fontSize: '32px',
             fill: '#fff',
             fontFamily: 'Roboto'
         }).setOrigin(0.5);
 
-        const configText = this.add.text(400, 400, 'Configuración', {
+        const configText = this.add.text(this.scale.width / 2, this.scale.height / 2 + 100, 'Configuración', {
             fontSize: '32px',
             fill: '#fff',
             fontFamily: 'Roboto'
         }).setOrigin(0.5);
 
+        // Hacer los textos interactivos y definir las acciones
         playText.setInteractive();
         playText.on('pointerdown', () => {
-            this.scene.start('PrimerNivel'); // Inicia la escena de Nivel 1
+            this.scene.start('LevelSelectScene'); // Inicia la escena de selección de nivel
         });
 
         configText.setInteractive();
@@ -53,6 +56,7 @@ export default class MainMenuScene extends Phaser.Scene {
             this.scene.start('SettingsScene');
         });
 
+        // Reproducir música de fondo si no está reproduciéndose
         if (!this.game.global.music || this.game.global.music.isPaused) {
             this.music = this.sound.add('backgroundMusic');
             this.music.play({
