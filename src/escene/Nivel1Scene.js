@@ -24,6 +24,8 @@ export default class Nivel1Scene extends Phaser.Scene {
     this.load.image("moneda", "src/Assets/Imagenes/Moneda.png");
     // Powerup gravedad
     this.load.image("powerupGravedad", "src/Assets/Imagenes/gravitySwapper.png");
+    // Powerup martillo
+    this.load.image("powerupMartillo", "src/Assets/Imagenes/hammer.png");
     // Sonido moneda
     this.load.audio("recogerSonido", "src/Assets/Audio/Sonido de moneda.mp3");
   }
@@ -50,6 +52,7 @@ export default class Nivel1Scene extends Phaser.Scene {
 
     // Crear instancia de jugador
     this.player = new Jugador(this, 10, this.mapa.heightInPixels - 100);
+    this.add.existing(this.player); // Asegurar que el jugador se añada a la escena
     this.player.setScale(0.6);
     // Habilitar las colisiones entre el jugador y el suelo
     this.capa2.setCollisionBetween(1, 100, true, false, this.capa2);
@@ -88,7 +91,7 @@ export default class Nivel1Scene extends Phaser.Scene {
 
     // Cargar el sonido de recoger moneda
     this.recogerSonido = this.sound.add("recogerSonido");
-}
+  }
 
   update() {
     // Actualizar jugador
@@ -105,8 +108,7 @@ export default class Nivel1Scene extends Phaser.Scene {
     if (this.player.x > 475) {
       this.player.x = 475;
     }
-}
-
+  }
 
   recogerMoneda(player, moneda) {
     this.recogerSonido.play(); // Reproducir el sonido de recogida de moneda
@@ -114,7 +116,8 @@ export default class Nivel1Scene extends Phaser.Scene {
   }
 
   activarGravedad(player, powerupGravedad) {
-    powerupGravedad.destroy();
-    
+    player.gravedadInvertida = !player.gravedadInvertida;
+    this.physics.world.gravity.y *= -1;
+    powerupGravedad.destroy(); 
   }
 }

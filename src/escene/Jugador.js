@@ -1,4 +1,3 @@
-// Jugador.js
 class Jugador extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, "player");
@@ -11,6 +10,7 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
     this.body.setOffset(15, 40);
 
     this.powerupActivo = false;
+    this.gravedadInvertida = false; // Estado de la gravedad
 
     // Configurar las animaciones del jugador
     scene.anims.create({
@@ -45,7 +45,6 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
     });
 
     // Configurar las físicas del jugador
-    // this.setCollideWorldBounds(true);
     this.setGravityY(300); // Ajusta la gravedad
 
     // Agregar una variable para controlar la animación de golpe
@@ -84,22 +83,24 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
       }
 
       if (cursors.up.isDown && this.body.onFloor()) {
-        this.setVelocityY(-250); // Salto
-        this.anims.play("jump", true);
+        if (this.gravedadInvertida) {
+          this.setVelocityY(300); // Saltar hacia abajo si la gravedad está invertida
+        } else {
+          this.setVelocityY(-300); // Saltar hacia arriba si la gravedad es normal
+        }
+        this.anims.play("jump", true); // Reproducir la animación de salto
       }
+    }
 
-      // Lógica de golpear
-      if (cursors.space.isDown && this.powerupActivo) {
-        this.isHitting = true;
-        this.setVelocityX(0); // Detener movimiento horizontal al golpear
-        this.anims.play("hit", true);
-        // Usar un temporizador para controlar la duración de la animación de golpe
-        this.scene.time.delayedCall(700, () => {
-          this.isHitting = false;
-        });
-      }
-      else{
-      }
+    // Lógica de golpear
+    if (cursors.space.isDown && this.powerupActivo) {
+      this.isHitting = true;
+      this.setVelocityX(0); // Detener movimiento horizontal al golpear
+      this.anims.play("hit", true);
+      // Usar un temporizador para controlar la duración de la animación de golpe
+      this.scene.time.delayedCall(700, () => {
+        this.isHitting = false;
+      });
     }
   }
 }

@@ -1,4 +1,5 @@
 import Jugador from "./Jugador.js";
+
 class Nivel2Scene extends Phaser.Scene {
   constructor() {
     super({ key: "Nivel2Scene" });
@@ -25,8 +26,7 @@ class Nivel2Scene extends Phaser.Scene {
 
     // Calcula el desplazamiento para centrar el mapa
     const offsetX = (this.cameras.main.width - this.mapa.widthInPixels) / 2;
-    const offsetY =
-      (this.cameras.main.height - this.mapa.heightInPixels) / 2 + 1300;
+    const offsetY = (this.cameras.main.height - this.mapa.heightInPixels) / 2 + 1300;
 
     // Crea las capas y establece su posición y profundidad
     this.capa1 = this.mapa
@@ -49,11 +49,11 @@ class Nivel2Scene extends Phaser.Scene {
     this.player = new Jugador(this, offsetX + 100, offsetY);
     this.player.setScale(0.6);
 
-    // Habilitar las colisiones entre el jugador con el suelo y con la lava
+    // Habilitar las colisiones con el jugador
     this.capa3.setCollisionBetween(1, 100, true, false, this.capa3);
     this.physics.add.collider(this.player, this.capa3);
-    //this.capa5.setCollisionBetween(1, 100, true, false, this.capa5);
-    //this.physics.add.collider(this.player, this.capa5);
+    this.capa5.setCollisionBetween(1, 100, true, false, this.capa5);
+    this.physics.add.collider(this.player, this.capa5, this.morir, null, this);
 
     // Obtener cursores
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -66,6 +66,23 @@ class Nivel2Scene extends Phaser.Scene {
     // Centrar la cámara en el jugador
     this.cameras.main.scrollX = this.player.x - this.cameras.main.width / 2;
     this.cameras.main.scrollY = this.player.y - this.cameras.main.height / 2;
+
+    if (this.player.x < 180) {
+      this.player.x = 180;
+    }
+
+    if (this.player.x > 610) {
+      this.player.x = 610;
+    }
+  }
+
+  morir(player, capa5) {
+    const offsetX = (this.cameras.main.width - this.mapa.widthInPixels) / 2;
+    const offsetY =
+      (this.cameras.main.height - this.mapa.heightInPixels) / 2 + 1300;
+    player.x = offsetX + 100;
+    player.y = offsetY;
+    //Aqui un contador de muertes
   }
 }
 

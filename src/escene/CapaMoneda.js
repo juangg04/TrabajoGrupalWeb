@@ -10,7 +10,6 @@ class CapaMoneda extends Phaser.Physics.Arcade.Sprite {
     }
   
     update() {
-      // Lógica de actualización si es necesario
     }
   }
   
