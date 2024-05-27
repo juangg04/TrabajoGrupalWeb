@@ -50,7 +50,7 @@ export default class LevelSelectScene extends Phaser.Scene {
 
         level1Text.setInteractive();
         level1Text.on('pointerdown', () => {
-            console.log('Nivel 1 clicked');
+            this.scene.start('Nivel1Scene');
         });
 
         specialLevelText.setInteractive();
@@ -60,7 +60,7 @@ export default class LevelSelectScene extends Phaser.Scene {
 
         level2Text.setInteractive();
         level2Text.on('pointerdown', () => {
-            console.log('Nivel 2 clicked');
+            this.scene.start('Nivel2Scene');
         });
     }
 
