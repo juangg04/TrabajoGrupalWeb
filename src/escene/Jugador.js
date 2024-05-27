@@ -6,7 +6,7 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
-    this.body.setSize(30, 40); 
+    this.body.setSize(30, 40);
     this.body.setOffset(15, 40);
 
     this.powerupActivo = false;
@@ -82,13 +82,14 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
         }
       }
 
-      if (cursors.up.isDown && this.body.onFloor()) {
-        if (this.gravedadInvertida) {
+      if (cursors.up.isDown) {
+        if (this.gravedadInvertida && this.body.onCeiling()) {
           this.setVelocityY(300); // Saltar hacia abajo si la gravedad está invertida
-        } else {
+          this.anims.play("jump", true); // Reproducir la animación de salto
+        } else if (this.body.onFloor()) {
           this.setVelocityY(-300); // Saltar hacia arriba si la gravedad es normal
+          this.anims.play("jump", true); // Reproducir la animación de salto
         }
-        this.anims.play("jump", true); // Reproducir la animación de salto
       }
     }
 
@@ -101,6 +102,21 @@ class Jugador extends Phaser.Physics.Arcade.Sprite {
       this.scene.time.delayedCall(700, () => {
         this.isHitting = false;
       });
+    }
+  }
+
+  modifyGravity() {
+    this.gravedadInvertida = !this.gravedadInvertida;
+    if (this.gravedadInvertida) {
+      this.setGravityY(-300);
+      this.flipY = true;
+      this.body.setSize(30, 40);
+      this.body.setOffset(15, 0);
+    } else {
+      this.setGravityY(300);
+      this.flipY = false;
+      this.body.setSize(30, 40);
+      this.body.setOffset(15, 40);
     }
   }
 }

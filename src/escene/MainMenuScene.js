@@ -20,8 +20,6 @@ export default class MainMenuScene extends Phaser.Scene {
   create() {
     if (!this.game.global) {
       this.game.global = {};
-      this.game.global.isLevel1Completed = false;
-      this.game.global.isLevel2Completed = false;
     }
 
     const frames = [];

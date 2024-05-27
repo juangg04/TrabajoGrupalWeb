@@ -23,7 +23,10 @@ export default class Nivel1Scene extends Phaser.Scene {
     // Moneda
     this.load.image("moneda", "src/Assets/Imagenes/Moneda.png");
     // Powerup gravedad
-    this.load.image("powerupGravedad", "src/Assets/Imagenes/gravitySwapper.png");
+    this.load.image(
+      "powerupGravedad",
+      "src/Assets/Imagenes/gravitySwapper.png"
+    );
     // Powerup martillo
     this.load.image("powerupMartillo", "src/Assets/Imagenes/hammer.png");
     // Sonido moneda
@@ -45,12 +48,17 @@ export default class Nivel1Scene extends Phaser.Scene {
     this.capa3 = this.mapa.createLayer("Capa de patrones 3", hojaTiles);
 
     // Ajusta la cámara para que se adapte al tamaño del mapa
-    this.cameras.main.setBounds(0, 0, this.mapa.widthInPixels, this.mapa.heightInPixels);
+    this.cameras.main.setBounds(
+      0,
+      0,
+      this.mapa.widthInPixels,
+      this.mapa.heightInPixels
+    );
 
     // Crear instancia de jugador
     const jugadorX = 10;
     const jugadorY = this.mapa.heightInPixels - 50; // Ajusta esta posición según sea necesario
-    this.player = new Jugador(this, jugadorX, jugadorY);
+    this.player = new Jugador(this, 100, 2500);
     this.add.existing(this.player);
     this.player.setScale(0.6);
 
@@ -65,7 +73,7 @@ export default class Nivel1Scene extends Phaser.Scene {
     this.monedas = this.physics.add.group();
 
     // Iterar sobre los tiles de la capa 3 y crear monedas donde corresponda
-    this.capa3.forEachTile(tile => {
+    this.capa3.forEachTile((tile) => {
       if (tile.index === 55) {
         const x = tile.getCenterX();
         const y = tile.getCenterY();
@@ -77,17 +85,41 @@ export default class Nivel1Scene extends Phaser.Scene {
     });
 
     // Añadir colisión entre el jugador y las monedas
-    this.physics.add.overlap(this.player, this.monedas, this.recogerMoneda, null, this);
+    this.physics.add.overlap(
+      this.player,
+      this.monedas,
+      this.recogerMoneda,
+      null,
+      this
+    );
 
     // Crear un grupo de powerups de gravedad
     this.powerupsGravedad = this.physics.add.group();
 
     // Crear powerup de gravedad y agregarlo al grupo
-    const powerupGravedad = this.powerupsGravedad.create(456, 2521, 'powerupGravedad');
+    const powerupGravedad = this.powerupsGravedad.create(
+      456,
+      2521,
+      "powerupGravedad"
+    );
     powerupGravedad.body.allowGravity = false;
 
+    // Crear powerup de gravedad y agregarlo al grupo
+    const powerupAntiGravedad = this.powerupsGravedad.create(
+      100,
+      1921,
+      "powerupGravedad"
+    );
+    powerupAntiGravedad.body.allowGravity = false;
+
     // Habilitar colisión entre el jugador y los powerups de gravedad
-    this.physics.add.overlap(this.player, this.powerupsGravedad, this.activarGravedad, null, this);
+    this.physics.add.overlap(
+      this.player,
+      this.powerupsGravedad,
+      this.activarGravedad,
+      null,
+      this
+    );
 
     // Crear bandera y agregarla al juego
     this.bandera = this.physics.add.staticImage(jugadorX, 140, "bandera");
@@ -95,7 +127,13 @@ export default class Nivel1Scene extends Phaser.Scene {
     this.bandera.refreshBody(); // Actualizar el cuerpo físico de la bandera
 
     // Habilitar colisión entre el jugador y la bandera
-    this.physics.add.overlap(this.player, this.bandera, this.nivelCompletado, null, this);
+    this.physics.add.overlap(
+      this.player,
+      this.bandera,
+      this.nivelCompletado,
+      null,
+      this
+    );
 
     // Cargar el sonido de recoger moneda
     this.recogerSonido = this.sound.add("recogerSonido");
@@ -124,13 +162,18 @@ export default class Nivel1Scene extends Phaser.Scene {
   }
 
   activarGravedad(player, powerupGravedad) {
-    player.gravedadInvertida = !player.gravedadInvertida;
-    this.physics.world.gravity.y *= -1;
-    powerupGravedad.destroy();
+    if (powerupGravedad.visible) {
+      this.player.modifyGravity();
+      this.physics.world.gravity.y *= -1;
+      powerupGravedad.setVisible(false);
+      setTimeout(() => {
+        powerupGravedad.setVisible(true);
+      }, 1000);
+    }
   }
 
   nivelCompletado(player, bandera) {
     this.scene.start("LevelSelectScene");
-    this.game.global.isLevel1Completed = true;
+    // this.game.global.isLevel1Completed = true;
   }
 }

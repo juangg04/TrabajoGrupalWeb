@@ -22,7 +22,10 @@ class Nivel2Scene extends Phaser.Scene {
     // Powerup martillo
     this.load.image("powerupMartillo", "src/Assets/Imagenes/hammer.png");
     // Powerup gravedad
-    this.load.image("powerupGravedad", "src/Assets/Imagenes/gravitySwapper.png");
+    this.load.image(
+      "powerupGravedad",
+      "src/Assets/Imagenes/gravitySwapper.png"
+    );
   }
 
   create() {
@@ -35,7 +38,8 @@ class Nivel2Scene extends Phaser.Scene {
 
     // Calcula el desplazamiento para centrar el mapa
     const offsetX = (this.cameras.main.width - this.mapa.widthInPixels) / 2;
-    const offsetY = (this.cameras.main.height - this.mapa.heightInPixels) / 2 + 1300;
+    const offsetY =
+      (this.cameras.main.height - this.mapa.heightInPixels) / 2 + 1300;
 
     // Crea las capas y establece su posición y profundidad
     this.capa1 = this.mapa
@@ -73,26 +77,56 @@ class Nivel2Scene extends Phaser.Scene {
     this.bandera.refreshBody(); // Actualizar el cuerpo físico de la bandera
 
     // Habilitar colisión entre el jugador y la bandera
-    this.physics.add.overlap(this.player, this.bandera, this.nivelCompletado, null, this);
+    this.physics.add.overlap(
+      this.player,
+      this.bandera,
+      this.nivelCompletado,
+      null,
+      this
+    );
 
     // Crear powerup de martillo y agregarlo al grupo
-    const powerupMartillo = this.powerupsMartillo.create(550, 160, 'powerupMartillo');
+    const powerupMartillo = this.powerupsMartillo.create(
+      550,
+      160,
+      "powerupMartillo"
+    );
     powerupMartillo.body.allowGravity = false;
     powerupMartillo.setScale(0.06);
 
-    this.physics.add.overlap(this.player, this.powerupsMartillo, this.activarMartillo, null, this);
+    this.physics.add.overlap(
+      this.player,
+      this.powerupsMartillo,
+      this.activarMartillo,
+      null,
+      this
+    );
 
     // Crear un grupo de powerups de gravedad
     this.powerupsGravedad = this.physics.add.group();
 
     // Crear powerup de gravedad y agregarlo al grupo
-    const powerupGravedad = this.powerupsGravedad.create(452, 2761, 'powerupGravedad');
+    const powerupGravedad = this.powerupsGravedad.create(
+      452,
+      2761,
+      "powerupGravedad"
+    );
     powerupGravedad.body.allowGravity = false;
-    const powerupGravedad2 = this.powerupsGravedad.create(200, 2841, 'powerupGravedad');
+    const powerupGravedad2 = this.powerupsGravedad.create(
+      200,
+      2841,
+      "powerupGravedad"
+    );
     powerupGravedad2.body.allowGravity = false;
 
     // Habilitar colisión entre el jugador y los powerups de gravedad
-    this.physics.add.overlap(this.player, this.powerupsGravedad, this.activarGravedad, null, this);
+    this.physics.add.overlap(
+      this.player,
+      this.powerupsGravedad,
+      this.activarGravedad,
+      null,
+      this
+    );
   }
 
   update() {
@@ -101,8 +135,7 @@ class Nivel2Scene extends Phaser.Scene {
 
     // Centrar la cámara en el jugador
     this.cameras.main.scrollX = this.player.x - this.cameras.main.width / 2;
-    this.cameras.main.scrollY = this.player.y - this
-    .cameras.main.height / 2;
+    this.cameras.main.scrollY = this.player.y - this.cameras.main.height / 2;
 
     if (this.player.x < 180) {
       this.player.x = 180;
@@ -116,7 +149,12 @@ class Nivel2Scene extends Phaser.Scene {
       this.player.y = 5;
     }
 
-    console.log("Coordenadas del jugador - X:", this.player.x, "Y:", this.player.y);
+    console.log(
+      "Coordenadas del jugador - X:",
+      this.player.x,
+      "Y:",
+      this.player.y
+    );
   }
 
   morir(player, capa5) {
@@ -129,6 +167,7 @@ class Nivel2Scene extends Phaser.Scene {
   }
 
   nivelCompletado(player, bandera) {
+    this.destroy();
     this.scene.start("LevelSelectScene");
     this.game.global.isLevel2Completed = true;
   }
@@ -136,7 +175,7 @@ class Nivel2Scene extends Phaser.Scene {
   activarMartillo(player, powerupMartillo) {
     powerupMartillo.destroy();
     this.player.powerupActivo = true;
-  }  
+  }
 
   activarGravedad(player, powerupGravedad) {
     player.gravedadInvertida = !player.gravedadInvertida;
