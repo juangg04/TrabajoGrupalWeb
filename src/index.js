@@ -1,7 +1,7 @@
-// src/index.js
+
 import MainMenuScene from './escene/MainMenuScene.js';
 import SettingsScene from './escene/SettingsScene.js';
-import Nivel1Scene from './escene/Nivel1Scene.js';
+import PrimerNivel from './escene/PrimerNivel.js'; // Asegúrate de importar correctamente
 
 const config = {
     type: Phaser.AUTO,
@@ -11,7 +11,14 @@ const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [MainMenuScene, SettingsScene, Nivel1Scene] // Ensure Nivel1Scene is added here
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 300 },
+            debug: false
+        }
+    },
+    scene: [MainMenuScene, SettingsScene, PrimerNivel] // Asegúrate de que PrimerNivel esté en la configuración
 };
 
 const game = new Phaser.Game(config);

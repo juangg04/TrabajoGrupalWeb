@@ -45,7 +45,7 @@ export default class MainMenuScene extends Phaser.Scene {
 
         playText.setInteractive();
         playText.on('pointerdown', () => {
-            this.scene.start('Nivel1Scene'); // Inicia la escena de Nivel 1
+            this.scene.start('PrimerNivel'); // Inicia la escena de Nivel 1
         });
 
         configText.setInteractive();
