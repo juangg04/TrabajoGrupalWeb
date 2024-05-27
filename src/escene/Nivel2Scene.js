@@ -17,6 +17,8 @@ class Nivel2Scene extends Phaser.Scene {
       "src/Assets/Imagenes/Jugador/Jugador_CorrerAnimación_PosiciónEstatica_Golpear.png",
       { frameWidth: 81, frameHeight: 85 }
     );
+    // Carga la imagen de la bandera
+    this.load.image("bandera", "src/Assets/Imagenes/bandera.png");
   }
 
   create() {
@@ -57,6 +59,14 @@ class Nivel2Scene extends Phaser.Scene {
 
     // Obtener cursores
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    // Crear bandera y agregarla al juego
+    this.bandera = this.physics.add.staticImage(offsetX + 100, 3080, "bandera");
+    this.bandera.setScale(0.1); // Ajustar la escala de la bandera
+    this.bandera.refreshBody(); // Actualizar el cuerpo físico de la bandera
+
+    // Habilitar colisión entre el jugador y la bandera
+    this.physics.add.overlap(this.player, this.bandera, this.nivelCompletado, null, this);
   }
 
   update() {
@@ -83,6 +93,11 @@ class Nivel2Scene extends Phaser.Scene {
     player.x = offsetX + 100;
     player.y = offsetY;
     //Aqui un contador de muertes
+  }
+
+  nivelCompletado(player, bandera) {
+    this.scene.start("LevelSelectScene");
+    this.game.global.isLevel2Completed = true;
   }
 }
 
