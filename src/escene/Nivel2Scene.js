@@ -19,9 +19,14 @@ class Nivel2Scene extends Phaser.Scene {
     );
     // Carga la imagen de la bandera
     this.load.image("bandera", "src/Assets/Imagenes/bandera.png");
+    // Powerup martillo
+    this.load.image("powerupMartillo", "src/Assets/Imagenes/hammer.png");
   }
 
   create() {
+    // Crear el grupo de powerups de martillo
+    this.powerupsMartillo = this.physics.add.group();
+
     // Inicializa el mapa de tiles
     this.mapa = this.make.tilemap({ key: "map" });
     this.hojaTiles = this.mapa.addTilesetImage("Assets", "tilesheet");
@@ -62,11 +67,18 @@ class Nivel2Scene extends Phaser.Scene {
 
     // Crear bandera y agregarla al juego
     this.bandera = this.physics.add.staticImage(offsetX + 100, 3080, "bandera");
-    this.bandera.setScale(0.1); // Ajustar la escala de la bandera
+    this.bandera.setScale(0.05); // Ajustar la escala de la bandera
     this.bandera.refreshBody(); // Actualizar el cuerpo físico de la bandera
 
     // Habilitar colisión entre el jugador y la bandera
     this.physics.add.overlap(this.player, this.bandera, this.nivelCompletado, null, this);
+
+    // Crear powerup de martillo y agregarlo al grupo
+    const powerupMartillo = this.powerupsMartillo.create(550, 160, 'powerupMartillo');
+    powerupMartillo.body.allowGravity = false;
+    powerupMartillo.setScale(0.06);
+
+    this.physics.add.overlap(this.player, this.powerupsMartillo, this.activarMartillo, null, this);
   }
 
   update() {
@@ -75,7 +87,8 @@ class Nivel2Scene extends Phaser.Scene {
 
     // Centrar la cámara en el jugador
     this.cameras.main.scrollX = this.player.x - this.cameras.main.width / 2;
-    this.cameras.main.scrollY = this.player.y - this.cameras.main.height / 2;
+    this.cameras.main.scrollY = this.player.y - this
+    .cameras.main.height / 2;
 
     if (this.player.x < 180) {
       this.player.x = 180;
@@ -83,6 +96,10 @@ class Nivel2Scene extends Phaser.Scene {
 
     if (this.player.x > 610) {
       this.player.x = 610;
+    }
+
+    if (this.player.y < 5) {
+      this.player.y = 5;
     }
   }
 
@@ -99,6 +116,11 @@ class Nivel2Scene extends Phaser.Scene {
     this.scene.start("LevelSelectScene");
     this.game.global.isLevel2Completed = true;
   }
+
+  activarMartillo(player, powerupMartillo) {
+    powerupMartillo.destroy();
+    this.player.powerupActivo = true;
+  }  
 }
 
 export default Nivel2Scene;
