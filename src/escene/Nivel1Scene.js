@@ -43,17 +43,15 @@ export default class Nivel1Scene extends Phaser.Scene {
     this.capa3 = this.mapa.createLayer("Capa de patrones 3", hojaTiles);
 
     // Ajusta la cámara para que se adapte al tamaño del mapa
-    this.cameras.main.setBounds(
-      0,
-      0,
-      this.mapa.widthInPixels,
-      this.mapa.heightInPixels
-    );
+    this.cameras.main.setBounds(0, 0, this.mapa.widthInPixels, this.mapa.heightInPixels);
 
     // Crear instancia de jugador
-    this.player = new Jugador(this, 10, this.mapa.heightInPixels - 100);
-    this.add.existing(this.player); // Asegurar que el jugador se añada a la escena
+    const jugadorX = 10;
+    const jugadorY = this.mapa.heightInPixels - 50; // Ajusta esta posición según sea necesario
+    this.player = new Jugador(this, jugadorX, jugadorY);
+    this.add.existing(this.player);
     this.player.setScale(0.6);
+
     // Habilitar las colisiones entre el jugador y el suelo
     this.capa2.setCollisionBetween(1, 100, true, false, this.capa2);
     this.physics.add.collider(this.player, this.capa2);
